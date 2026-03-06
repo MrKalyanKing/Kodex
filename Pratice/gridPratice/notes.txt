@@ -1,0 +1,14 @@
+##block line element- div,h1,p
+
+   block element works with tranform properties  
+   here height and width will works 
+
+##inline element -- anchor tag, span,
+
+
+    inline element dosent work with transform properties
+    but here the no height and width properties dosent work
+
+
+## inline block
+    images are inline block 

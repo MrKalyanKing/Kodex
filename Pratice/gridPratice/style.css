@@ -1,0 +1,27 @@
+.container{
+    display: grid;
+
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: repeat(4,1fr);
+    gap: 10px;
+    grid-template-areas: "box1 box1 box1"
+                          "box2 box3 box4"
+                          "box5 box6 box6"
+                          "box5 box7 box8";
+
+    
+}
+
+.child{
+    background-color: aqua;
+    min-height: 20vh;
+    border: 2px solid black;
+}
+.box1 { grid-area: box1; }
+.box2 { grid-area: box2; }
+.box3 { grid-area: box3; }
+.box4 { grid-area: box4; }
+.box5 { grid-area: box5; }
+.box6 { grid-area: box6; }
+.box7 { grid-area: box7; }
+.box8 { grid-area: box8; }
