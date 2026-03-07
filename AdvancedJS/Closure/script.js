@@ -9,13 +9,13 @@ let fn=()=>{
        return ()=>{
         console.log(a)
         return ()=>{
-            console.log(a)
+            return a
         }
        }
     }
 }
 
-console.log(fn()()())
+console.log(fn()()()())
 // let res=fn();
 // let res1=res()
 // let res2=res1()
@@ -23,3 +23,5 @@ console.log(fn()()())
 
 //here  fn is closure to nearest child element
 // Here itself it will print 
+
+// 
