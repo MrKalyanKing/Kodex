@@ -13,3 +13,12 @@ response.then((val)=> val.json() )
 
 //streams 
 //here readable is browser part it return the promise
+
+
+// ** AJAX **//
+
+//asynchronous javascript xml
+
+// ajax -- > fetch --> browser
+
+//browser provides 4 types network api(xml,fetch),  dom events(action),  dom apis(selection), timer
