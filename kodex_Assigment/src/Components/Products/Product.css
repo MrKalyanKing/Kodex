@@ -1,0 +1,22 @@
+.prod-display{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+
+
+}
+.prod-name{
+    text-align: center;
+    padding-bottom: 10px;
+}
+.prod-name h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #ff7e5f, #feb47b);
+  -webkit-background-clip: text;   /* for Chrome, Safari */
+  -webkit-text-fill-color: transparent;
+  background-clip: text;           /* for Firefox */
+  color: transparent;              /* fallback */
+  text-align: center;
+}

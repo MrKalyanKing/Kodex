@@ -1,120 +1,85 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React from 'react'
+import Product from './Components/Products/Product'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const products = [
+  {
+    id: 1,
+    name: "Wireless Bluetooth Headphones",
+    rating: 3,
+    price: 2999,
+    category: "Electronics",
+    image: "https://rukminim2.flixcart.com/image/612/612/xif0q/headphone/c/d/q/black-earbuds-with-premium-quality-sound-bluetooth-dssb-original-imahjdkxufkwjrw8.jpeg?q=70",
+    description: "Comfortable wireless headphones with clear sound and water resistance."
+  },
+  {
+    id: 2,
+    name: "Smart Watch Series 5",
+    price: 4999,
+    rating: 4,
+    category: "Electronics",
+    image: "https://rukminim2.flixcart.com/image/612/612/xif0q/smartwatch/m/q/u/-original-imahhybhenmujbcz.jpeg?q=70",
+    description: "Feature-rich smartwatch with fitness tracking and sleek design."
+  },
+  {
+    id: 3,
+    name: "Men's Casual Sneakers",
+    price: 1999,
+    rating: 5,
+    category: "Fashion",
+    image: "https://rukminim2.flixcart.com/image/612/612/xif0q/shoe/d/q/c/6-py-01-6-prayo-white-original-imahkusj2f7ugdpd.jpeg?q=70",
+    description: "Stylish sneakers designed for comfort and everyday wear."
+  },
+  {
+    id: 4,
+    name: "Women's Handbag",
+    price: 2499,
+    rating: 3,
+    category: "Fashion",
+    image: "https://rukminim2.flixcart.com/image/612/612/xif0q/hand-messenger-bag/l/7/t/monolltyramedium-satchel-25-hqge2127106n2-satchel-lavie-24-original-imahk55ya8vs5emb.jpeg?q=70",
+    description: "Elegant handbag with spacious compartments for daily essentials."
+  },
+  {
+    id: 5,
+    name: "Gaming Mechanical Keyboard",
+    price: 3499,
+    rating: 4,
+    category: "Electronics",
+    image: "https://rukminim2.flixcart.com/image/612/612/xif0q/keyboard/u/a/p/-original-imah9pzyjzt7gwpw.jpeg?q=70",
+    description: "Durable mechanical keyboard with RGB lighting for gamers."
+  },
+  {
+    id: 6,
+    name: "Portable Bluetooth Speaker",
+    price: 1799,
+    rating: 5,
+    category: "Electronics",
+    image: "https://rukminim2.flixcart.com/image/612/612/xif0q/speaker/n/g/u/-original-imahf78dfsvhnddf.jpeg?q=70",
+    description: "Compact speaker with powerful sound and long battery life."
+  },
+  {
+    id: 7,
+    name: "Fitness Yoga Mat",
+    price: 999,
+    rating: 3,
+    category: "Fitness",
+    image: "https://rukminim2.flixcart.com/image/612/612/xif0q/sport-mat/m/i/f/yoga-mat-for-men-women-kids-with-carry-strap-purple-4mm-4-62-original-imahjt2s7cr5yhgh.jpeg?q=70",
+    description: "Non-slip yoga mat with comfortable cushioning for workouts."
+  },
+  {
+    id: 8,
+    name: "Stainless Steel Water Bottle",
+    price: 699,
+    rating: 2,
+    category: "Home & Kitchen",
+    image: "https://rukminim2.flixcart.com/image/612/612/xif0q/bottle/i/c/e/1000-durable-stylish-leak-proof-1-steel-black-slovic-original-imaheb836avdzqzx.jpeg?q=70",
+    description: "Durable stainless steel bottle, leak-proof and easy to carry."
+  }
+];
+const App = () => {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    <div>
+      <Product  products={products}/>
+    </div>
   )
 }
 
