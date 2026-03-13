@@ -29,10 +29,13 @@
   margin: 0 auto;
   
 }
-.desc{
-  width: 20vw;
+.desc {
+  width: 100%;          /* match card width */
+  max-width: 90%;       /* optional margin inside card */
+  margin: 0 auto;       /* center horizontally */
   padding-bottom: 12px;
   color: rgb(120, 117, 113);
+  text-align: center;   /* align text nicely */
 }
 .prod-cat{
   text-align: center;
@@ -61,7 +64,6 @@
 }
 
 /* 📱 Tablet adjustments */
-
 @media (max-width: 768px) {
   .card-container {
     max-width: 90%;
@@ -72,6 +74,14 @@
     gap: 0.5rem;
     align-items: center;
   }
+
+.desc {
+    width: 100%;
+    max-width: 95%;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+
 
   .btn button {
     width: 100%;
@@ -85,8 +95,16 @@
     text-align: center;
   }
 
+  .desc {
+    width: 100%;
+    max-width: 95%;
+    text-align: center;
+    font-size: 0.85rem;
+  }
+
+
   .btn button {
     height: 36px;
     font-size: 0.9rem;
   }
-}
+} 
