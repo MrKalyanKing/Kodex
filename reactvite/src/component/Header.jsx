@@ -5,7 +5,7 @@ const Header = (props) => {
     console.log("Header Rendered");
     // const phone=useContext(AppContext)
     // console.log(phone)
-     useEffect(()=>{
+    const helo= useEffect(()=>{
     const timer=setInterval(()=>{
       console.log("Kalyan")
     },1000)
@@ -13,6 +13,8 @@ const Header = (props) => {
       clearInterval(timer)
     }
   },[])
+
+  console.log(helo)//undefined
   return (
     <div>Header</div>
   )
