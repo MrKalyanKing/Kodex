@@ -2,9 +2,9 @@ import React, { useContext } from 'react'
 import { AppContext } from '../Hooks/Usecontext';
 
 const Header = (props) => {
-    console.log("Header Rendered",props);
-    const phone=useContext(AppContext)
-    console.log(phone)
+    console.log("Header Rendered");
+    // const phone=useContext(AppContext)
+    // console.log(phone)
   return (
     <div>Header</div>
   )
