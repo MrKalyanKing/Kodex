@@ -10,17 +10,14 @@ const App = () => {
   const [count,setCount]=useState(0)
   
   
-  useEffect(()=>{
-    console.log("Kalyan")
-
-  },[count])
+ 
 
  
 
   return(
     <div>
       <h1>App</h1>
-      <Header/>
+      {toggle?<Header/>:<h1>Kalyan</h1>}
 
       <button onClick={()=>setToggle((prev)=>!prev)}>toggle</button>
       <button onClick={()=>setCount((prev)=>prev+1)}>Increment</button>
