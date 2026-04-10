@@ -12,24 +12,42 @@ const App = () => {
   const [count,setCount]=useState(0)
 
   const divref=useRef({})
-  console.log(divref);
+  // console.log(divref);
   
   
-  useLayoutEffect(()=>{
-    divref.current.style.backgroundColor="red"
-    divref.current.style.transform="translateX(40px)"
-  },[])
-   useEffect(()=>{
-    divref.current.style.backgroundColor="blue"
-    divref.current.style.transform="translateX(40px)"
-  },[])
+  // useLayoutEffect(()=>{
+  //   divref.current.style.backgroundColor="red"
+  //   divref.current.style.transform="translateX(40px)"
+  // },[])
+  //  useEffect(()=>{
+  //   divref.current.style.backgroundColor="blue"
+  //   divref.current.style.transform="translateX(40px)"
+  // },[])
  
+  // setCount((prev)=>prev+1)
+  // useEffect(()=>{
+  //   setCount((prev)=> prev+1)
+  //   setCount((prev)=> prev+1)
+    
+  // },[])
 
- 
+ useEffect( () => {
+  setCount(prev => prev + 1);
 
+  console.log(count);
+
+  setCount(prev => prev + 1);
+},[]);
   return(
     <div ref={divref}>
       <h1>App</h1>
+      <h1>{count}</h1>
+      <h1>{count}</h1>
+<button
+  
+>
+  Increment Twice
+</button>
 
     </div>
   )
