@@ -1,7 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { loadBlogs, saveBlogs } from '../utils/localStorage';
 
 const BlogContext = createContext();
+
+const STORAGE_KEY = 'kodex_blogs_data';
+const USER_KEY = 'kodex_user';
+const ALL_USERS_KEY = 'kodex_all_users';
 
 const SEED_DATA = [
   {
@@ -33,47 +36,58 @@ export const useBlogs = () => {
 };
 
 export const BlogProvider = ({ children }) => {
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState(() => {
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    } catch (error) {
+      console.error('Error loading blogs:', error);
+      return [];
+    }
+  });
+  
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('kodex_user');
-    return savedUser ? JSON.parse(savedUser) : null;
+    try {
+      const savedUser = localStorage.getItem(USER_KEY);
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch (error) {
+      return null;
+    }
   });
   
   const [allUsers, setAllUsers] = useState(() => {
-    const savedUsers = localStorage.getItem('kodex_all_users');
-    return savedUsers ? JSON.parse(savedUsers) : [];
+    try {
+      const savedUsers = localStorage.getItem(ALL_USERS_KEY);
+      return savedUsers ? JSON.parse(savedUsers) : [];
+    } catch (error) {
+      return [];
+    }
   });
 
-  // Load blogs on initial mount
+  // Seed data if empty
   useEffect(() => {
-    const initialBlogs = loadBlogs();
-    if (initialBlogs.length === 0) {
+    if (blogs.length === 0) {
       setBlogs(SEED_DATA);
-      saveBlogs(SEED_DATA);
-    } else {
-      setBlogs(initialBlogs);
     }
   }, []);
 
   // Sync blogs to localStorage
   useEffect(() => {
-    if (blogs.length > 0) {
-      saveBlogs(blogs);
-    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(blogs));
   }, [blogs]);
 
   // Sync current user to localStorage
   useEffect(() => {
     if (user) {
-      localStorage.setItem('kodex_user', JSON.stringify(user));
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
     } else {
-      localStorage.removeItem('kodex_user');
+      localStorage.removeItem(USER_KEY);
     }
   }, [user]);
 
   // Sync all users to localStorage
   useEffect(() => {
-    localStorage.setItem('kodex_all_users', JSON.stringify(allUsers));
+    localStorage.setItem(ALL_USERS_KEY, JSON.stringify(allUsers));
   }, [allUsers]);
 
   const signup = (userData) => {

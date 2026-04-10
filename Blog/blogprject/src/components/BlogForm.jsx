@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Send, X, AlertCircle } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 const BlogForm = ({ onSubmit, initialData, title }) => {
   const [formData, setFormData] = useState({
@@ -28,11 +27,7 @@ const BlogForm = ({ onSubmit, initialData, title }) => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="max-w-2xl mx-auto glass-card"
-    >
+    <div className="max-w-2xl mx-auto glass-card">
       <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent">
         {title}
       </h2>
@@ -84,7 +79,7 @@ const BlogForm = ({ onSubmit, initialData, title }) => {
           </button>
         </div>
       </form>
-    </motion.div>
+    </div>
   );
 };
 

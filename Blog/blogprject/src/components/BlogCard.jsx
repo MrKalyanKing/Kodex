@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { Edit2, Trash2, Calendar, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { useBlogs } from '../context/BlogContext';
 
 const BlogCard = ({ blog, onDelete }) => {
@@ -16,13 +15,7 @@ const BlogCard = ({ blog, onDelete }) => {
   const isAuthor = user?.role === 'author';
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      className="glass-card group flex flex-col h-full bg-slate-900/20"
-    >
+    <div className="glass-card group flex flex-col h-full bg-slate-900/20">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-slate-400 text-sm">
           <Calendar className="w-3.5 h-3.5" />
@@ -65,8 +58,8 @@ const BlogCard = ({ blog, onDelete }) => {
           <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
-export default BlogCard;
+export default memo(BlogCard);
