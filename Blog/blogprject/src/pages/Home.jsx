@@ -1,20 +1,31 @@
 import React from 'react';
-import BlogList from '../components/BlogList';
+import BlogCard from '../components/BlogCard';
+import { store } from '../store';
 
 const Home = () => {
+  const blogs = store.getBlogs();
+
   return (
-    <div className="pt-32 pb-20">
-      <div className="max-w-7xl mx-auto px-6">
-        <header className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-white to-slate-500 bg-clip-text text-transparent">
-            Insights & Ideas
-          </h1>
-          <p className="text-slate-400 text-lg max-w-2xl">
-            Explore the latest thoughts, tasks, and stories from the community.
-          </p>
-        </header>
-        
-        <BlogList />
+    <div className="container-custom">
+      <header className="py-32 text-center mb-24">
+        <h1 className="text-7xl md:text-9xl font-black mb-10 tracking-tighter leading-[0.9] dark:text-white">
+          <span className="text-blue-600">Kodex</span> <br className="sm:hidden" />
+          <span className="text-pink-500">Writer</span>
+        </h1>
+        <p className="text-slate-500 dark:text-slate-400 text-xl md:text-3xl max-w-4xl mx-auto leading-relaxed font-medium antialiased px-4">
+          Discover high-impact articles on technology, engineering, and digital craft from a library of verified professional writers.
+        </p>
+      </header>
+      
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Latest Articles</h2>
+        <span className="text-sm font-medium text-slate-400 dark:text-slate-500">{blogs.length} articles</span>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+        {blogs.map(blog => (
+          <BlogCard key={blog.id} blog={blog} />
+        ))}
       </div>
     </div>
   );

@@ -1,217 +1,196 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useBlogs } from '../context/BlogContext';
-import { User, Mail, Lock, ShieldCheck, PenTool, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
+import React from 'react';
+import { store } from '../store';
+import { Mail, Lock, Pen, ArrowRight, User } from 'lucide-react';
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [role, setRole] = useState('reader');
-  const [serverError, setServerError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const hash = window.location.hash;
+  const isSignup = hash === '#signup';
   
-  // Field states
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
-  });
-  
-  // Error states
-  const [errors, setErrors] = useState({});
-
-  const { signup, login } = useBlogs();
-  const navigate = useNavigate();
-
-  const validate = () => {
-    const newErrors = {};
-    if (!isLogin && !formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    } else if (!isLogin && formData.name.length < 3) {
-      newErrors.name = 'Minimum 3 characters';
-    }
-
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)) {
-      newErrors.email = 'Invalid email address';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Minimum 6 characters';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error for this field
-    if (errors[name]) {
-      setErrors(prev => {
-        const updated = { ...prev };
-        delete updated[name];
-        return updated;
-      });
-    }
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setServerError('');
+    const data = new FormData(e.target);
+    const email = data.get('email');
+    const password = data.get('password');
+    const confirmPassword = data.get('confirmPassword');
+    const name = data.get('name');
+    const role = data.get('role');
     
-    if (!validate()) return;
+    // Clear previous errors
+    const errorEl = document.getElementById('auth-error');
+    if (errorEl) errorEl.classList.add('hidden');
 
-    setIsSubmitting(true);
-    try {
-      if (isLogin) {
-        await login({ email: formData.email, password: formData.password, role });
-      } else {
-        await signup({ name: formData.name, email: formData.email, password: formData.password, role });
+    // Validation
+    if (isSignup) {
+      if (!name || name.length < 2) {
+        showError("Please enter your full name.");
+        return;
       }
-      navigate('/');
+      if (password !== confirmPassword) {
+        showError("Passwords do not match.");
+        return;
+      }
+      if (password.length < 6) {
+        showError("Password must be at least 6 characters.");
+        return;
+      }
+    }
+
+    if (!email || !email.includes('@')) {
+      showError("Please enter a valid email address.");
+      return;
+    }
+
+    try {
+      if (isSignup) {
+        store.signup({ name, email, password, role });
+      } else {
+        store.login({ email, password });
+      }
+      window.location.hash = '#home';
     } catch (err) {
-      setServerError(err.message);
-    } finally {
-      setIsSubmitting(false);
+      showError(err.message);
     }
   };
 
-  const toggleMode = () => {
-    setIsLogin(!isLogin);
-    setServerError('');
-    setErrors({});
-    setFormData({ name: '', email: '', password: '' });
+  const showError = (msg) => {
+    const errorEl = document.getElementById('auth-error');
+    if (errorEl) {
+      errorEl.textContent = msg;
+      errorEl.classList.remove('hidden');
+    }
+  };
+
+  const selectRole = (role) => {
+    // Update hidden input
+    const roleInput = document.getElementById('role-input');
+    if (roleInput) roleInput.value = role;
+
+    // Update UI classes
+    document.querySelectorAll('.role-card').forEach(card => {
+      card.classList.remove('selected');
+    });
+    const selectedCard = document.getElementById(`role-${role}`);
+    if (selectedCard) selectedCard.classList.add('selected');
   };
 
   return (
-    <div className="pt-32 pb-20 px-6 min-h-screen flex items-center justify-center">
-      <div className="max-w-md w-full glass-card overflow-hidden">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-tr from-brand-primary to-brand-secondary rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-xl shadow-purple-500/20">
-            <ShieldCheck className="w-8 h-8 text-white" />
+    <div className="min-h-screen bg-slate-50 dark:bg-black py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center transition-colors duration-300">
+      <div className="max-w-md w-full">
+        {/* Logo Icon */}
+        <div className="flex justify-center mb-8">
+          <div className="w-14 h-14 bg-[#004ecc] rounded-full flex items-center justify-center shadow-lg">
+            <Pen className="text-white w-7 h-7" />
           </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-            {isLogin ? 'Welcome Back' : 'Create Account'}
+        </div>
+
+        {/* Header Text */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+            {isSignup ? 'Create an Account' : 'Welcome Back'}
           </h1>
-          <p className="text-slate-400 mt-2">
-            {isLogin ? 'Access your portal' : 'Join the Kodex community'}
+          <p className="mt-2 text-slate-600 dark:text-slate-400 font-medium">
+            {isSignup ? 'Join Kodex Writer to start reading or writing' : 'Sign in to your account to continue'}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {serverError && (
-            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 text-red-500 text-sm">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              {serverError}
-            </div>
-          )}
+        {/* Error Message Section */}
+        <div id="auth-error" className="hidden mb-6 p-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 rounded-lg text-red-600 dark:text-red-400 text-sm font-bold text-center">
+        </div>
 
-          {!isLogin && (
-            <div className="transition-all duration-300">
-              <label className="block text-sm font-medium text-slate-400 mb-2">Display Name</label>
-              <div className="relative">
-                <User className="field-icon" />
-                <input
+        {/* The Card */}
+        <div className="bg-white dark:bg-black rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 p-8">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {isSignup && (
+              <div>
+                <label className="label-field dark:text-slate-300">Name</label>
+                <input 
                   name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className={`input-field input-with-icon ${errors.name ? 'border-red-500/50' : ''}`}
+                  type="text" 
                   placeholder="John Doe"
+                  className="input-field dark:bg-black dark:border-slate-700 dark:text-white"
                 />
               </div>
-              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
-            </div>
-          )}
+            )}
 
-          <div>
-            <label className="block text-sm font-medium text-slate-400 mb-2">Email Address</label>
-            <div className="relative">
-              <Mail className="field-icon" />
-              <input
+            <div>
+              <label className="label-field dark:text-slate-300">Email</label>
+              <input 
                 name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className={`input-field input-with-icon ${errors.email ? 'border-red-500/50' : ''}`}
-                placeholder="name@example.com"
+                type="email" 
+                placeholder="you@example.com"
+                className="input-field dark:bg-black dark:border-slate-700 dark:text-white"
               />
             </div>
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-400 mb-2">Password</label>
-            <div className="relative">
-              <Lock className="field-icon" />
-              <input
-                type="password"
+            <div>
+              <label className="label-field dark:text-slate-300">Password</label>
+              <input 
                 name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className={`input-field input-with-icon ${errors.password ? 'border-red-500/50' : ''}`}
-                placeholder="••••••••"
+                type="password" 
+                placeholder={isSignup ? "Create a password" : "Enter your password"}
+                className="input-field dark:bg-black dark:border-slate-700 dark:text-white"
               />
             </div>
-            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
-          </div>
 
-          <div className="grid grid-cols-2 gap-3 pt-2">
-            <button
-              type="button"
-              onClick={() => setRole('reader')}
-              className={`p-3 rounded-xl border transition-all flex items-center justify-center gap-2 text-sm font-medium ${
-                role === 'reader' 
-                ? 'bg-brand-primary/10 border-brand-primary text-brand-primary' 
-                : 'bg-slate-900/50 border-slate-800 text-slate-500 hover:border-slate-700'
-              }`}
-            >
-              <User className="w-4 h-4" />
-              Reader
-            </button>
-            <button
-              type="button"
-              onClick={() => setRole('author')}
-              className={`p-3 rounded-xl border transition-all flex items-center justify-center gap-2 text-sm font-medium ${
-                role === 'author' 
-                ? 'bg-brand-secondary/10 border-brand-secondary text-brand-secondary' 
-                : 'bg-slate-900/50 border-slate-800 text-slate-500 hover:border-slate-700'
-              }`}
-            >
-              <PenTool className="w-4 h-4" />
-              Author
-            </button>
-          </div>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="btn-primary w-full flex items-center justify-center gap-2 py-3 mt-4"
-          >
-            {isSubmitting ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
+            {isSignup && (
               <>
-                <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
-                <ArrowRight className="w-4 h-4" />
+                <div>
+                  <label className="label-field dark:text-slate-300">Confirm Password</label>
+                  <input 
+                    name="confirmPassword"
+                    type="password" 
+                    placeholder="Confirm your password"
+                    className="input-field dark:bg-black dark:border-slate-700 dark:text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="label-field dark:text-slate-300">Account Type</label>
+                  <input type="hidden" id="role-input" name="role" defaultValue="reader" />
+                  <div className="flex gap-4 mt-2">
+                    <div 
+                      id="role-reader"
+                      onClick={() => selectRole('reader')}
+                      className="role-card selected group dark:border-slate-700"
+                    >
+                      <User className="mx-auto w-6 h-6 mb-2 text-slate-400 group-hover:text-[#004ecc]" />
+                      <p className="font-bold text-slate-900 dark:text-white text-sm">Reader</p>
+                      <p className="text-[10px] text-slate-500">Read articles</p>
+                    </div>
+                    <div 
+                      id="role-author"
+                      onClick={() => selectRole('author')}
+                      className="role-card group dark:border-slate-700"
+                    >
+                      <Pen className="mx-auto w-6 h-6 mb-2 text-slate-400 group-hover:text-[#004ecc]" />
+                      <p className="font-bold text-slate-900 dark:text-white text-sm">Author</p>
+                      <p className="text-[10px] text-slate-500">Write & publish</p>
+                    </div>
+                  </div>
+                </div>
               </>
             )}
-          </button>
-        </form>
 
-        <div className="mt-8 pt-6 border-t border-slate-800/50 text-center">
-          <p className="text-slate-500 text-sm">
-            {isLogin ? "Don't have an account?" : "Already have an account?"}
-            <button
-              type="button"
-              onClick={toggleMode}
-              className="ml-2 text-brand-primary font-bold hover:underline"
-            >
-              {isLogin ? 'Sign Up' : 'Log In'}
+            <button type="submit" className="w-full btn-primary !rounded-lg mt-6 py-3 flex items-center justify-center gap-2 group shadow-lg shadow-blue-500/10">
+              <span className="text-white font-bold">{isSignup ? 'Create Account' : 'Sign In'}</span>
             </button>
-          </p>
+          </form>
+
+          <div className="mt-8 text-center border-t border-slate-100 dark:border-slate-800 pt-6">
+            <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">
+              {isSignup ? 'Already have an account?' : "Don't have an account?"}
+              <a 
+                href={isSignup ? '#auth' : '#signup'} 
+                onClick={() => {
+                  const err = document.getElementById('auth-error');
+                  if (err) err.classList.add('hidden');
+                }}
+                className="ml-2 text-[#004ecc] font-bold hover:underline"
+              >
+                {isSignup ? 'Sign in' : 'Sign up'}
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>

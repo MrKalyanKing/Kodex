@@ -1,65 +1,36 @@
-import React, { memo } from 'react';
-import { Link } from 'react-router-dom';
-import { Edit2, Trash2, Calendar, ArrowRight } from 'lucide-react';
-import { useBlogs } from '../context/BlogContext';
+import React from 'react';
 
-const BlogCard = ({ blog, onDelete }) => {
-  const { user } = useBlogs();
-  
-  const formattedDate = new Date(blog.createdAt).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
-
-  const isAuthor = user?.role === 'author';
-
+const BlogCard = ({ blog }) => {
   return (
-    <div className="glass-card group flex flex-col h-full bg-slate-900/20">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2 text-slate-400 text-sm">
-          <Calendar className="w-3.5 h-3.5" />
-          <span>{formattedDate}</span>
-        </div>
-        
-        {isAuthor && (
-          <div className="flex items-center gap-2">
-            <Link
-              to={`/edit/${blog.id}`}
-              className="p-2 rounded-lg hover:bg-brand-primary/10 hover:text-brand-primary transition-colors text-slate-400"
-              title="Edit"
-            >
-              <Edit2 className="w-4 h-4" />
-            </Link>
-            <button
-              onClick={() => onDelete(blog.id)}
-              className="p-2 rounded-lg hover:bg-red-500/10 hover:text-red-500 transition-colors text-slate-400"
-              title="Delete"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          </div>
-        )}
+    <div className="ink-card flex flex-col h-full group border-slate-200 dark:bg-black dark:border-slate-800 transition-colors duration-300">
+      <div className="flex flex-wrap gap-2 mb-5">
+        {blog.categories?.map(cat => (
+          <span key={cat} className="badge bg-slate-100 dark:bg-slate-900/50 text-slate-600 dark:text-slate-400 font-semibold px-2.5 py-1">
+            {cat}
+          </span>
+        ))}
       </div>
 
-      <h3 className="text-xl font-bold mb-3 group-hover:text-brand-primary transition-colors line-clamp-2">
-        {blog.title}
-      </h3>
-      
-      <p className="text-slate-400 text-sm leading-relaxed mb-6 line-clamp-3">
-        {blog.content}
+      <a href={`#blog/${blog.id}`} className="block group mb-4">
+        <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors leading-tight">
+          {blog.title}
+        </h3>
+      </a>
+
+      <p className="text-slate-500 dark:text-slate-400 text-base leading-relaxed mb-6 line-clamp-3">
+        {blog.content.substring(0, 160)}...
       </p>
 
-      <div className="mt-auto pt-4 border-t border-slate-800/50">
-        <div
-          className="inline-flex items-center gap-2 text-sm font-semibold text-brand-primary group/link"
+      <div className="mt-auto">
+        <a
+          href={`#blog/${blog.id}`}
+          className="text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors"
         >
-          {isAuthor ? 'Manage Post' : 'Read Full Insights'}
-          <ArrowRight className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
-        </div>
+          Read more
+        </a>
       </div>
     </div>
   );
 };
 
-export default memo(BlogCard);
+export default BlogCard;
